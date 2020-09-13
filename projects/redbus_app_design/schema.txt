@@ -1,0 +1,130 @@
+## SCHEMA DESIGN THEME: ##
+
+- RedBus is an agrregator of long duration buses, operating intercities / interstates / intrastates.
+- These buses are operated by various travel operators like VRL, Vijayanand Travels, Orange Travels, Manu Travels, etc
+- Only Owners (travel company operators) can register their buses for a specific route, like - Bangalore to Udupi, Delhi to Haridwar, etc
+- Owner can modify / delete only his bus related records (not other owner's)
+- Admin (Redbus approved Admins) can modify / delete / view any user of bus related records. 
+- User (customer) is looking book seat(s) in a bus for a specific journey
+- User has source, destination, and date of jouney in mind. So this is the starting point for a user.
+- Based on the source-destination combination, bus_details to be fetched.  
+- Prices (increasing order) for different options (max 10 per page) to be shown to user
+- Check availability to show number of seats available for booking
+- User can also review the rating of the bus before proceeding to book
+- Once booked, travel_date stamp along with other details to be sent for updates in booking_details table.
+- Seat availability is a dynamic parameter - so, it is updated in seat_availability table as soon as a seat is booked or a booking is cancelled. 
+- Bus rating is also a dynamic parameter - so, it is updated in bus_rating table after user completes his/her journey and rates a bus on app/frontend (for its services, puntuality, etc)
+- Booking details of user to be updated in booking_details table with user_details_id, bus_details_id (as foreign keys) and the travel_date, starting_time, reaching_time stamps. 
+- Bus number (e.g., KA05MJ2965) to be sent to user (customer) 1 hour before starting_time on email as well as mobile (SMS) 
+
+
+## RELATIONSHIPS: ##
+user_details -- bus_details: One-to-Many
+user_details -- booking_details: One-to-Many
+bus_details -- search_bus: One-to-Many
+bus_details -- seat_availability: One-to-Many
+bus_details -- bus_rating: One-to-Many
+bus_details -- bus_facilities: Many-to-Many 
+
+## RELATIOSHIP TABLES: ##
+
+USER_DETAILS:
+CREATE TABLE user_details (
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> traveller_name varchar (255) NOT NULL,
+    -> username varchar (255) NOT NULL,
+    -> mobile varchar (255) NOT NULL, 
+    -> email varchar (255) NOT NULL,
+    -> role varchar (255) NOT NULL,		# Role: Admin / Owner / User (customer)			
+    -> PRIMARY KEY (id)
+    -> ); 
+
+
+BOOKING_DETAILS:
+CREATE TABLE booking_details (
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> travel_date int NOT NULL,
+    -> travel_month varchar (75) NOT NULL,
+    -> travel_year int NOT NULL,
+    -> user_details_id int NOT NULL,				# user_id for customer to be specified
+    -> bus_details_id int NOT NULL, 
+    -> FOREIGN KEY (user_details_id) REFERENCES user_details (id),
+    -> FOREIGN KEY (bus_details_id) REFERENCES bus_details (id),
+    -> PRIMARY KEY (id)
+    -> ); 
+
+
+BUS_DETAILS:
+CREATE TABLE bus_details (
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> bus_number varchar (255) NOT NULL,
+    -> travel_compamy_name varchar (255) NOT NULL,
+    -> bus_type varchar (255) NOT NULL, 			# bus_type: Sleeper/Semi-sleeper/Standard
+    -> source varchar (255) NOT NULL,
+    -> destination varchar (255) NOT NULL,
+    -> starting_time int NOT NULL,
+    -> reaching_time int NOT NULL,
+    -> price int NOT NULL,
+    -> user_details_id int NOT NULL,				# user_id for travel owner to be specified 
+    -> FOREIGN KEY (user_details_id) REFERENCES user_details (id),
+    -> PRIMARY KEY (id)
+    -> );  
+
+
+SEARCH_BUS:
+CREATE TABLE search_bus (
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> source varchar (255) NOT NULL,
+    -> destination varchar (255) NOT NULL,
+    -> travel_date int NOT NULL,
+    -> travel_month varchar (75) NOT NULL,
+    -> travel_year int NOT NULL,
+    -> bus_details_id int NOT NULL,
+    -> FOREIGN KEY (bus_details_id) REFERENCES bus_details (id),
+    -> PRIMARY KEY (id)
+    -> );
+
+
+SEAT_AVAILABILITY:
+CREATE TABLE seat_availability (
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> total_seats int NOT NULL,
+    -> booked_seats int NOT NULL,
+    -> available_seats int NOT NULL,
+    -> bus_details_id int NOT NULL,
+    -> FOREIGN KEY (bus_details_id) REFERENCES bus_details (id),
+    -> PRIMARY KEY (id)
+    -> );
+
+
+BUS_RATING:
+CREATE TABLE bus_rating (
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> rating float NOT NULL,
+    -> bus_details_id int NOT NULL,
+    -> FOREIGN KEY (bus_details_id) REFERENCES bus_details (id),
+    -> PRIMARY KEY (id)
+    -> );
+
+
+BUS_FACILITIES:
+CREATE TABLE bus_facilities (
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> facility1 varchar (255),		# Blanket
+    -> facility2 varchar (255),		# TV
+    -> facility3 varchar (255),		# Snacks
+    -> PRIMARY KEY (id)
+    -> );
+
+
+BUS_DETAILS -- BUS_FACILITIES: (Junction/Linking Table)
+CREATE TABLE bus_details--bus_facilities (
+    -> id int NOT NULL AUTO_INCREMENT,
+    -> bus_details_id int,
+    -> bus_facilities_id int,
+    -> FOREIGN KEY (bus_details_id) REFERENCES bus_details (id),
+    -> FOREIGN KEY (bus_facilities_id) REFERENCES bus_facilities (id),
+    -> PRIMARY KEY (id)
+    -> ); 
+
+

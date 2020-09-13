@@ -1,0 +1,18 @@
+Queries
+
+File queries.txt
+Query to filter the buses on the basis of source, destination, and date, with pagination, in order of price low to high
+all the bookings of a user in the current month past and upcoming with bus details
+query to filter with amenities, price, source, destination, and type of bus.
+
+## ANSWERS: ## 
+
+1. SELECT travel_company_name, bus_type, starting_time, reaching_time, price, rating FROM search_bus JOIN bus_details ON search_bus.bus_details_id = bus_details.id WHERE source='Bangalore' AND destination='Udupi' ORDER BY price ASC LIMIT 10;
+
+2. (a) SELECT travel_date, starting_time, reaching_time, traveller_name, travel_company_name, bus_type, price, rating FROM booking_details as bod JOIN bus_details as bd ON bod.bus_details_id = bd.id JOIN user_details as ud ON bd.user_details_id = ud.id WHERE travel_month='August' AND travel_year=2020 ORDER BY travel_date ASC LIMIT 10;
+    
+   (b) SELECT travel_date, starting_time, reaching_time, traveller_name, travel_company_name, bus_type, price, rating FROM booking_details as bod JOIN bus_details as bd ON bod.bus_details_id = bd.id JOIN user_details as ud ON bd.user_details_id = ud.id WHERE travel_month='July' AND travel_year=2020 ORDER BY travel_date ASC LIMIT 10;
+
+   (c) SELECT travel_date, starting_time, reaching_time, traveller_name, travel_company_name, bus_type, price, rating FROM booking_details as bod JOIN bus_details as bd ON bod.bus_details_id = bd.id JOIN user_details as ud ON bd.user_details_id = ud.id WHERE travel_month='September' AND travel_year=2020 ORDER BY travel_date ASC LIMIT 10;
+
+3. SELECT travel_company_name, bus_type, starting_time, reaching_time, price, rating FROM bus_facilities as bf JOIN bus_details--bus_facilities as bdbf ON bdbf.bus_facilities_id = bf.id JOIN bus_details as bd ON bdbf.bus_details_id = bd.id JOIN bus_search as bs ON bs.bus_details_id = bd.id WHERE facility1='Blanket' AND facility2='TV' AND price < 1500 AND source='Delhi' AND destination='Mussoorie' AND bus_type='sleeper' ORDER BY price ASC LIMIT 10;

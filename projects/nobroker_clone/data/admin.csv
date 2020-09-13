@@ -1,0 +1,6 @@
+iid,name,mobile,email,password,role
+1,sunil,1111122222,sunil@email.com,1007,admin
+2,ankan,2222233333,ankan@email.com,1008,admin
+3,aditya,3333344444,aditya@email.com,1009,admin
+4,arun,4444455555,arun@email.com,1010,admin
+5,ravi,5555566666,ravi@email.com,1011,admin

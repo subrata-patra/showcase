@@ -1,0 +1,7 @@
+id,bus_number,departure_loc,arrival_loc,journey_duration,fare
+
+b1,123,hsr,majestic,2,80
+
+b2,456,btm,mgroad,1,20
+
+b3,789,hbrlayout,airport,2,150

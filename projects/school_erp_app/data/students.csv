@@ -1,0 +1,4 @@
+iid,name,email,gender,password,contact_number,address,father_name,mother_name,role
+1,veda,vpat@gmail.com,F,1212,9980200795,suncity,subrata,neel,user
+3,riti,rk@gmail.com,F,1236,9999967890,magarpatta,subhadip,suparna,user
+4,sadhna,sd@gmail.com,F,1237,8899967890,belandur,manjunath,saritha,user
